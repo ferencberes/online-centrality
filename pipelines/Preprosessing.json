@@ -1,0 +1,18 @@
+{
+    "config_path": "pipelines/Preprosessing.json",
+    "description": "Preprocess raw data before experiments.",
+    "id": "0",
+    "name": "Preprosessing",
+    "notebooks": [
+        {
+            "is_clone": "no",
+            "kernel_type": "py3-env",
+            "name": "/ScheduleScoreUpdater.",
+            "path": "ipython/preprocessing/ScheduleScoreUpdater.ipynb",
+            "pipeline_status": "on",
+            "type": "Preprocessor"
+        }
+    ],
+    "py_scripts": [],
+    "reports": []
+}
