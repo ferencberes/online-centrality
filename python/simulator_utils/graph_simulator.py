@@ -2,12 +2,12 @@ import networkx as nx
 import sys
 sys.path.insert(0,"../")
 from centrality_utils.base_computer import BaseComputer
-import graph_extractor as ge
+from .graph_extractor import store_edges
     
 class OnlineGraphSimulator():
     def __init__(self,graph_array,time_type="epoch",verbose=False):
         """Graph simulator for calculating centrality scores in each snapshot. Use 'time_type'='epoch' if the elapsed time is measures in seconds, or 'time_type'='index' if the elapsed time is measures in the number of edges."""
-        timestamps, edge_map, num_edges = ge.store_edges(graph_array)
+        timestamps, edge_map, num_edges = store_edges(graph_array)
         if time_type not in ["index","epoch"]:
             raise RuntimeError("Invalid time_type")
         self.verbose = verbose

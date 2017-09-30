@@ -7,10 +7,10 @@
         {
             "is_clone": "no",
             "kernel_type": "py3-env",
-            "name": "/ScheduleScoreUpdater.",
+            "name": "ScheduleScoreUpdater",
             "path": "ipython/preprocessing/ScheduleScoreUpdater.ipynb",
             "pipeline_status": "on",
-            "type": "Preprocessor"
+            "type": "Preprocessing"
         }
     ],
     "py_scripts": [],

@@ -2,3 +2,6 @@
 *.tmp
 *.info
 *.ipynb_checkpoints/
+data/*
+results/*
+*.nbconvert*

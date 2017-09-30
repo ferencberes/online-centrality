@@ -1,38 +1,38 @@
 {
-    "config_path": "pipelines/OnlineCentrality.json",
-    "default_config": {
-        "data_file_prefix": "/mnt/61cb6df7-f940-4d96-95b3-7f435bd01376/sztaki/git/fberes/online_centrality/data/raw/",
-        "dataset_id": "rg17",
-        "day_index_threshold": 457,
-        "edge_delta": 770,
-        "edge_index_threshold": 351083,
-        "epoch_delta": 3600,
-        "experiment_path": "/mnt/61cb6df7-f940-4d96-95b3-7f435bd01376/sztaki/git/fberes/online_centrality/data/centrality_scores//rg17_epoch_t457_d3600",
-        "min_epoch": 1495576800,
-        "score_folder_prefix": "/mnt/61cb6df7-f940-4d96-95b3-7f435bd01376/sztaki/git/fberes/online_centrality/data/centrality_scores/",
-        "time_type": "epoch"
-    },
-    "description": "Calculate centrality scores for several models.",
-    "id": "1",
-    "name": "OnlineCentrality",
-    "notebooks": [
-        {
-            "is_clone": "no",
-            "kernel_type": "py2-env",
-            "name": "CentralityScoreComputer",
-            "path": "ipython/experiments/centrality_score_computer.ipynb",
-            "pipeline_status": "on",
-            "type": "Scorer"
-        },
-        {
-            "is_clone": "no",
-            "kernel_type": "py2-env",
-            "name": "ScoreComputerParams",
-            "path": "ipython/parameters/centrality_params.ipynb",
-            "pipeline_status": "off",
-            "type": "Parameters"
-        }
-    ],
-    "py_scripts": [],
-    "reports": []
+   "config_path": "pipelines/OnlineCentrality.json",
+   "default_config": {
+      "data_file_prefix": "/home/fberes/sztaki/git/fberes/online_centrality/data/raw/",
+      "dataset_id": "rg17",
+      "day_index_threshold": 457,
+      "edge_delta": 770,
+      "edge_index_threshold": 351083,
+      "epoch_delta": 3600.0,
+      "experiment_path": "/home/fberes/sztaki/git/fberes/online_centrality/data/centrality_scores//rg17_epoch_t457_d3600",
+      "min_epoch": 1495576800,
+      "score_folder_prefix": "/home/fberes/sztaki/git/fberes/online_centrality/data/centrality_scores/",
+      "time_type": "epoch"
+   },
+   "description": "Calculate centrality scores for several models.",
+   "id": "1",
+   "name": "OnlineCentrality",
+   "notebooks": [
+      {
+         "is_clone": "no",
+         "kernel_type": "py3-env",
+         "name": "CentralityScoreComputer",
+         "path": "ipython/experiments/centrality_score_computer.ipynb",
+         "pipeline_status": "on",
+         "type": "Scorer"
+      },
+      {
+         "is_clone": "no",
+         "kernel_type": "py3-env",
+         "name": "ScoreComputerParams",
+         "path": "ipython/parameters/centrality_params.ipynb",
+         "pipeline_status": "off",
+         "type": "Parameters"
+      }
+   ],
+   "py_scripts": [],
+   "reports": []
 }

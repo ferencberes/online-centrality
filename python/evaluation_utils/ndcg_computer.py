@@ -5,7 +5,7 @@ def dcg(relevance_map, pred_order, k=None):
     if k == None:
         k = len(pred_order)
     dcg_score = 0.0
-    for i in xrange(k):
+    for i in range(k):
         pred_id = pred_order[i]
         if pred_id in relevance_map:
             dcg_score += float(relevance_map[pred_id]) / np.log(i+2)

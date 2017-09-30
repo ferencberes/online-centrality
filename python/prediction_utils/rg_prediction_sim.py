@@ -35,11 +35,11 @@ def load_or_calculate_prediction_result(input_path_prefixes, score, met, interva
     similarity_result_file = "%s/%s.txt" % (similarity_result_folder,met)
     if os.path.exists(similarity_result_file):
         res = list(np.loadtxt(similarity_result_file))
-        print "Results were loaded from file: %s" % similarity_result_file
+        print("Results were loaded from file: %s" % similarity_result_file)
     else:
         res = eu.calculate_measure_for_days(input_path_prefixes, measure_type=met, days=intervals, is_sequential=False, excluded_indices=excluded_indices, restricted_indices=restricted_indices, n_threads=n_threads)
         np.savetxt(similarity_result_file,res)
-        print "%s: '%s' was calculated." % (score, met)
+        print("%s: '%s' was calculated." % (score, met))
     return res
 
 def calculate_metrics_for_prediction(similarity_map, measure_id, metric_id, score_folders, interval_bounds, experiment_paths, similarity_result_folder, excluded_indices=None, restricted_indices=None, filter_keys=None, n_threads=1):
@@ -58,4 +58,4 @@ def calculate_metrics_for_prediction(similarity_map, measure_id, metric_id, scor
                 input_path_prefixes.append("%s/%s/%s" % (experiment_paths[1], score, measure_id if measure_id != "nbm" else "ndm")) # prediction file prefix
                 similarity_res_dir = "%s/%i/%s" % (similarity_result_folder, day_idx, score)
                 similarity_map[measure_id][day_idx][score] = load_or_calculate_prediction_result(input_path_prefixes, score, metric_id, range(bound[0],bound[1]), similarity_res_dir, excluded_indices, restricted_indices, n_threads)
-    print "prediction analysis was FINISHED"
+    print("prediction analysis was FINISHED")

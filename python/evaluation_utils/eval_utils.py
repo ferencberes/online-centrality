@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
-import correlation_computer as cc
-import ndcg_computer as nc
+from .correlation_computer import *
+from .ndcg_computer import *
 import sys, os, multiprocessing, functools
 
 ### Masking function calls to old code base ###
@@ -37,9 +37,9 @@ def result2file(result_list,file_name):
         if len(result_list) == 1:
             f.write('%f\n' % (result_list[0]))
         else:
-            for i in xrange(len(result_list)):
+            for i in range(len(result_list)):
                 f.write('%i %f\n' % (i, result_list[i]))
-    print 'Done'
+    print('Done')
 
     
 def get_bigger_than_const_ratio_for_a_day(input_prefix, const, day):
@@ -74,21 +74,21 @@ def calculate_measure_for_a_day(input_prefix, measure_type, is_sequential, exclu
             map_2 = load_score_map(input_prefix[1], day, excluded_indices=excluded_indices, restricted_indices=restricted_indices)
     m_val = None
     if measure_type=="pearson":
-        m_val = cc.corr_pearson(map_1,map_2)[0]
+        m_val = corr_pearson(map_1,map_2)[0]
     elif measure_type=="spearman":
-        m_val = cc.corr_spearman(map_1,map_2)[0]
+        m_val = corr_spearman(map_1,map_2)[0]
     elif measure_type=="kendall":
-        m_val = cc.corr_kendalltau(map_1,map_2)[0]
+        m_val = corr_kendalltau(map_1,map_2)[0]
     elif measure_type=="w_kendall":
-        m_val = cc.corr_weighted_kendalltau(map_1,map_2,use_fast=False)[0]
+        m_val = corr_weighted_kendalltau(map_1,map_2,use_fast=False)[0]
     elif measure_type=="w_kendall_fast":
-        m_val = cc.corr_weighted_kendalltau(map_1,map_2,use_fast=True)[0]
+        m_val = corr_weighted_kendalltau(map_1,map_2,use_fast=True)[0]
     elif "ndcg" in measure_type:
         if "@" in measure_type:
             top_k = int(measure_type.split("@")[1])
         else:
             top_k = None
-        m_val = nc.ndcg(map_1,map_2,k=top_k)
+        m_val = ndcg(map_1,map_2,k=top_k)
     else:
         raise RuntimeError("Invalid correlation type: %s!" % corr_type)
     if output_prefix == None or not is_sequential:
@@ -119,5 +119,5 @@ if __name__ == "__main__":
         
         calculate_measure_for_a_day(input_prefix, measure_type, excluded_indices, day, output_prefix)
     else:
-        print "Usage: <input_prefix> <output_prefix> <measure_type> <second_day>"
+        print("Usage: <input_prefix> <output_prefix> <measure_type> <second_day>")
 
