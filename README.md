@@ -1,7 +1,7 @@
 ﻿online-centrality
 =================
 
-Repository of our Online Centrality research.
+This repository contains the code used in the Online Centrality research of [Ferenc Béres and András A. Benczúr](https://dms.sztaki.hu/en/tagok).
 
 # Requirements
 
