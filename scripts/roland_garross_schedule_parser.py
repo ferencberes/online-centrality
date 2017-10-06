@@ -25,8 +25,8 @@ def get_results(match):
     result = match.find("div", {"class": "result"})
     teams, _, matchScore = result.contents
     teams, _, teams_opponent = teams.contents
-    teams = teams.a.string
-    teams_opponent = teams_opponent.a.string
+    teams = [item.string for item in teams.findAll("a")]
+    teams_opponent = [item.string for item in teams_opponent.findAll("a")]
     matchScore = matchScore.string.strip("\n") if matchScore.string is not None else "Cancelled"
     return teams, teams_opponent, matchScore
 
@@ -49,9 +49,13 @@ def main(schedule_folder, output_folder):
                 match = matches.contents[i]
                 matchHeader = match.find("div", {"class": "matchHeader"}).span.string
                 teams, teams_opponent, matchScore = get_results(match)
-                new_row = {"day": day, "date": date, "courtName": court_name, "orderNumber": i+1, "matchHeader": matchHeader, 
-                       "startDate": start_en, "playerName active": teams, "playerName opponent": teams_opponent, "matchScore": matchScore}
-                schedule_df = schedule_df.append(new_row, ignore_index=True)
+                if len(teams) == len(teams_opponent) and len(teams) in [1,2]:
+                    for idx in range(len(teams)):
+                        new_row = {"day": day, "date": date, "courtName": court_name, "orderNumber": i+1, "matchHeader": matchHeader, 
+                               "startDate": start_en, "playerName active": teams[idx], "playerName opponent": teams_opponent[idx], "matchScore": matchScore}
+                        schedule_df = schedule_df.append(new_row, ignore_index=True)
+                else:
+                    raise RuntimeError("Invalid player number occured!")
     print("writing...")
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
