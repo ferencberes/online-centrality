@@ -6,17 +6,22 @@ This repository contains the code used in the Online Centrality research of [Fer
 # Requirements
 
    * UNIX environment
-   * **Python 3.5** conda environment (jupyter, nbconvert etc.)
-   * List of python packages used in this project:
-      * **data processing:** pandas, numpy, bs4, datetime
+   * **Python 3.5** conda environment with pre-installed jupyter:
+
+   ```bash
+   conda create -n myenv python=3.5 jupyter
+   source activate myenv
+   ```
+   * Install the following packages with *conda* or *pip*:
+      * **data processing:** pandas, numpy, bs4
       * **scientific:** scipy, networkx 
       * **visualization:** matplotlib, seaborn
-      * **general:** sys, os, math, re, json, shutil, operator, collections, multiprocessing, functools, itertools, 
+      * **general:** sys, os, math, re, json, shutil, operator, collections, multiprocessing, functools, itertools, datetime
 
 
 # Usage
 
-In this repository you can find the codebase that we using during our research. The Roland Garros 2017 dataset is available on the website of our research group [SZTAKI DMS](https://dms.sztaki.hu/hu/letoltes/roland-garros-2017-twitter-collection).
+In this repository you can find the codebase that we using during our research. **The Roland-Garros 2017 dataset is available on the website of our research group [SZTAKI DMS](https://dms.sztaki.hu/hu/letoltes/roland-garros-2017-twitter-collection).**
 
 You can simply run all the following steps with one script but it will take many time. Look for details in this section **"Calculate centrality scores"**.
 
