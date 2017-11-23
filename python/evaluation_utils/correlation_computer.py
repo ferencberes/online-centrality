@@ -1,11 +1,7 @@
-import math
-import operator
+import math, operator, itertools
 import pandas as pd
-from scipy.stats import pearsonr,spearmanr,kendalltau,rankdata
-import itertools
 import numpy as np
-import numexpr as ne
-
+from scipy.stats import pearsonr,spearmanr,kendalltau,rankdata
 
 ### Basic correlation measures ###
 

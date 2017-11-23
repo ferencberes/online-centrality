@@ -6,8 +6,13 @@ This repository contains the code used in the Online Centrality research of [Fer
 # Requirements
 
    * UNIX environment
-   * **Python 3** conda environment
-   * **TODO: specify the complete list of python packages used in the project**
+   * **Python 3.5** conda environment (jupyter, nbconvert etc.)
+   * List of python packages used in this project:
+      * **data processing:** pandas, numpy, bs4, datetime
+      * **scientific:** scipy, networkx 
+      * **visualization:** matplotlib, seaborn
+      * **general:** sys, os, math, re, json, shutil, operator, collections, multiprocessing, functools, itertools, 
+
 
 # Usage
 
