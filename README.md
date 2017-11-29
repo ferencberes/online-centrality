@@ -3,6 +3,13 @@
 
 This repository contains the code used in the Online Centrality research of [Ferenc Béres and András A. Benczúr](https://dms.sztaki.hu/en/tagok).
 
+# Introduction
+
+Online Centrality is a centrality measure updateable by the
+edge stream in a dynamic network. It incorporates the elapsed time of edge activations as time decay.
+
+I will present our results with a poster on December 1 in [Complex Networks 2017](http://complexnetworks.org/#program) conference. The title of the poster is [Online Centrality in Temporally Evolving Networks](https://github.com/ferencberes/online-centrality/blob/master/documents/complex_networks_2017_poster.pdf). 
+
 # Requirements
 
    * UNIX environment
