@@ -47,7 +47,7 @@ class StaticIndegreeComputer(BaseComputer):
         for i in range(len(self.param_list)):
             param = self.param_list[i]
             G = graph if param.lookback_cnt == 0 else get_graph_from_snapshots(self, snapshot_graph, param, i)
-            in_degs = G.in_degree()
+            in_degs = dict(G.in_degree())
             # we want to included zero indegree nodes in output files as well, that is why we add epsilon!
             indeg_with_epsilon = pd.Series(in_degs) + epsilon
             new_col_df = pd.DataFrame({str(i):indeg_with_epsilon})

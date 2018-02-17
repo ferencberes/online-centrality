@@ -1,12 +1,9 @@
+import sys, os, multiprocessing, functools
 import pandas as pd
 import numpy as np
 from .correlation_computer import *
 from .ndcg_computer import *
-import sys, os, multiprocessing, functools
-
-### Masking function calls to old code base ###
-
-#TODO?
+from .binary_eval_computer import *
 
 ### Utils ###
 
@@ -14,7 +11,7 @@ def load_score_map(input_prefix, day, epsilon=0.000000001, excluded_indices=None
     """TODO: The centrality maps were pre-sorted in decreasing order???"""
     score_file_path = input_prefix + '_%i.csv' % day
     if not os.path.exists(score_file_path):
-        raise IOError("File is missing: %i" % score_file_path)
+        raise IOError("File is missing: %s" % score_file_path)
     else:
         scores = pd.read_csv(score_file_path, sep=" ", names=["id","score"])
         # filter for indices
@@ -72,23 +69,29 @@ def calculate_measure_for_a_day(input_prefix, measure_type, is_sequential, exclu
             map_1 = load_score_map(input_prefix[0], day, excluded_indices=excluded_indices, restricted_indices=restricted_indices)
             # prediction
             map_2 = load_score_map(input_prefix[1], day, excluded_indices=excluded_indices, restricted_indices=restricted_indices)
+    if "@" in measure_type:
+        top_k = int(measure_type.split("@")[1])
+    else:
+        top_k = None
     m_val = None
-    if measure_type=="pearson":
-        m_val = corr_pearson(map_1,map_2)[0]
-    elif measure_type=="spearman":
-        m_val = corr_spearman(map_1,map_2)[0]
-    elif measure_type=="kendall":
-        m_val = corr_kendalltau(map_1,map_2)[0]
-    elif measure_type=="w_kendall":
-        m_val = corr_weighted_kendalltau(map_1,map_2,use_fast=False)[0]
-    elif measure_type=="w_kendall_fast":
+    if "pearson" in measure_type:
+        m_val = corr_pearson(map_1,map_2,k=top_k)[0]
+    elif "spearman" in measure_type:
+        m_val = corr_spearman(map_1,map_2,k=top_k)[0]
+    elif "kendall" in measure_type:
+        m_val = corr_kendalltau(map_1,map_2,k=top_k)[0]
+    elif "w_kendall_fast" in measure_type:
         m_val = corr_weighted_kendalltau(map_1,map_2,use_fast=True)[0]
+    elif "recall" in measure_type:
+        m_val = recall(map_1,map_2,k=top_k)
+    elif "precision" in measure_type:
+        m_val = precision(map_1,map_2,k=top_k)
     elif "ndcg" in measure_type:
-        if "@" in measure_type:
-            top_k = int(measure_type.split("@")[1])
+        if "lin" in measure_type:
+            is_log_decay=False
         else:
-            top_k = None
-        m_val = ndcg(map_1,map_2,k=top_k)
+            is_log_decay=True
+        m_val = ndcg(map_1,map_2,k=top_k,is_log_decay=is_log_decay)
     else:
         raise RuntimeError("Invalid correlation type: %s!" % corr_type)
     if output_prefix == None or not is_sequential:
@@ -100,12 +103,14 @@ def calculate_measure_for_a_day(input_prefix, measure_type, is_sequential, exclu
 def calculate_measure_for_days(input_prefix, days, measure_type, is_sequential=True, excluded_indices=None, restricted_indices=None, n_threads=1):
     """Calculate the selected correlation measure for multiple snapshots.
     Choose from 'pearson', 'spearman', 'kendall' or 'w_kendall'."""
-    #return map(lambda x: calculate_corr_for_a_day(input_prefix, corr_type, measure_type, x), days)
-    f_partial = functools.partial(calculate_measure_for_a_day, input_prefix, measure_type, is_sequential, excluded_indices, restricted_indices)
-    pool = multiprocessing.Pool(processes=n_threads)
-    res = pool.map(f_partial, days)
-    pool.close()
-    pool.join()
+    if n_threads > 1:
+        f_partial = functools.partial(calculate_measure_for_a_day, input_prefix, measure_type, is_sequential, excluded_indices, restricted_indices)
+        pool = multiprocessing.Pool(processes=n_threads)
+        res = pool.map(f_partial, days)
+        pool.close()
+        pool.join()
+    else:
+        res = [calculate_measure_for_a_day(input_prefix, measure_type, is_sequential, excluded_indices, restricted_indices, d) for d in days]
     return res
 
 

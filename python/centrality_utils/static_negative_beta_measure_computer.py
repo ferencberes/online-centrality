@@ -46,14 +46,14 @@ class StaticNegativeBetaMeasureComputer(BaseComputer):
         for i in range(len(self.param_list)):
             param = self.param_list[i]
             G = graph if param.lookback_cnt == 0 else get_graph_from_snapshots(self, snapshot_graph, param, i)
-            out_deg = G.out_degree()
+            out_deg = dict(G.out_degree())
             # calculate weights for in edges
             rec_out_deg = dict([(n,1.0/out_deg[n] if out_deg[n] > 0 else 1.0) for n in out_deg])
             edges_with_weights = [(link[0],link[1],rec_out_deg[link[0]]) for link in G.edges()]
             # re-initialize the snapshot graph with 'in_weights'
             G.clear()
             G.add_weighted_edges_from(edges_with_weights,weight="in_weight")
-            nbmes = G.in_degree(weight="in_weight") # due to the 'in_weight' values on the edges the result is the negative beta measure
+            nbmes = dict(G.in_degree(weight="in_weight")) # due to the 'in_weight' values on the edges the result is the negative beta measure
             # we want to included zero neg. beta measure nodes in output files as well, that is why we add epsilon!
             nbmes_with_epsilon = pd.Series(nbmes) + epsilon
             new_col_df = pd.DataFrame({str(i):nbmes_with_epsilon})

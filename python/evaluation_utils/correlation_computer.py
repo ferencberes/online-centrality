@@ -1,26 +1,39 @@
-import math, operator, itertools
+import math
+import operator
 import pandas as pd
-import numpy as np
 from scipy.stats import pearsonr,spearmanr,kendalltau,rankdata
+import itertools
+import numpy as np
+import numexpr as ne
+
 
 ### Basic correlation measures ###
 
-def corr_pearson(top_list_prev, top_list):
+def corr_pearson(top_list_prev, top_list, k=None):
     """Compute Pearson correlation (based on Scipy)
     NOTE: Lists are DataFrame columns AND they must be sorted according to their value!!!"""
+    if k != None:
+        top_list_prev = get_top_k(top_list_prev, k)
+        top_list = get_top_k(top_list, k)
     list_a, list_b = proc_corr(top_list_prev, top_list)
     return [pearsonr(list_a, list_b)[0]]
 
-def corr_spearman(top_list_prev, top_list):
+def corr_spearman(top_list_prev, top_list, k=None):
     """Compute Spearman's Rho correlation (based on Scipy)
     NOTE: Lists are DataFrame columns AND they must be sorted according to their value!!!"""
+    if k != None:
+        top_list_prev = get_top_k(top_list_prev, k)
+        top_list = get_top_k(top_list, k)
     list_a, list_b = proc_corr(top_list_prev, top_list)
     return [spearmanr(list_a, list_b)[0]]
 
-def corr_kendalltau(top_list_prev, top_list):
+def corr_kendalltau(top_list_prev, top_list, k=None):
     """Compute Kendall's Tau correlation (based on Scipy).
     NOTE: Lists are DataFrame columns AND they must be sorted according to their value!!!"""
     # it is irrelevant whether we compute kendall for ranks or scores.
+    if k != None:
+        top_list_prev = get_top_k(top_list_prev, k)
+        top_list = get_top_k(top_list, k)
     list_a, list_b = proc_corr(top_list_prev, top_list)
     return [kendalltau(list_a, list_b)[0]]
 
@@ -38,7 +51,14 @@ def corr_weighted_kendalltau(top_list_prev, top_list, use_fast=True):
         rank_list_b = tiedrank(list_b)
         return [computeWKendall(rank_list_a,rank_list_b,ranked_input=True)[1]]
 
-### Score list preproceor functions ###
+### Score list preprocessor functions ###
+
+def get_top_k(l,k):
+    """Get k biggest score from a list"""
+    if k==None:
+        return l
+    else:
+        return l.sort_values("score",ascending=False).head(k)
 
 def proc_corr(l_1, l_2):
     """Fill lists with scores ordered by the ranks in the second list. 

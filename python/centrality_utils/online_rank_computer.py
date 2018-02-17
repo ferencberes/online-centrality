@@ -1,20 +1,25 @@
 import os, multiprocessing, functools
 import numpy as np
 from .base_computer import *
+from .weight_funtions import *
 
 def link2str(link):
     return str((int(link[0]),int(link[1])))
 
 class OnlineRankParams():
-    def __init__(self,alpha,weight_function):
+    def __init__(self,alpha=0.05,beta=1.0,weight_function=ConstantWeighter()):
         if alpha > 0 and alpha < 1:
             self.alpha = alpha
         else:
             raise RuntimeError("'alpha' must be from interval (0,1)!")
+        if beta >= 0 and beta <= 1:
+            self.beta = beta
+        else:
+            raise RuntimeError("'beta' must be from interval [0,1]!")
         self.weight_func = weight_function
         
     def __str__(self):
-        return "olr_a%0.2f_%s" % (self.alpha,str(self.weight_func))
+        return "olr_a%0.2f_b%0.2f_%s" % (self.alpha,self.beta,str(self.weight_func))
 
 class OnlineRankComputer(BaseComputer):
     """Implementation of Andras"s idea with multiple parameters: version 4.0"""
@@ -60,7 +65,7 @@ class OnlineRankComputer(BaseComputer):
             edge_index = self.edge_indexes[h_in_edge]  
             time_last_activation = self.edge_last_activation[edge_index]
             delta_time = time - time_last_activation
-            time_decaying_weights = [param.weight_func.weight(delta_time) for param in self.param_list]
+            time_decaying_weights = [param.beta * param.weight_func.weight(delta_time) for param in self.param_list]
             olr_values += self.edge_weights[edge_index,:] * time_decaying_weights
         if rating != None: # combine updated value with old value based on rating
             olr_values = rating * np.array(olr_values) + (1.0-rating) * self.online_ranks[node_index,:]
