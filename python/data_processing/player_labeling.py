@@ -110,9 +110,7 @@ def set_label_value(label_value_dict, user, date_idx, collected_dates, screen_na
 
 def get_daily_label_dicts(label_value_dict, collected_dates, mentions_df, mapper_dicts, last_date=None, missing_dates=None):
     """Label users in mention data based on schedule. Give label 1 to daily tennis players and 0 otherwise."""
-    recoder_dict, screen_name_to_player, daily_found_player_dict = mapper_dicts
-    #daily_users_dict = get_daily_users_dict(collected_dates, mentions_df, last_date)
-    user_dict = get_screen2id_dict(mentions_df)
+    recoder_dict, screen_name_to_player, user_dict, daily_found_player_dict = mapper_dicts
     daily_label_dicts = {}
     print("Labeling users STARTED!")
     for date_idx, date in enumerate(collected_dates):

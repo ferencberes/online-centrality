@@ -1,0 +1,65 @@
+{
+   "config_path": "pipelines/USOpen.json",
+   "default_config": {
+      "eval_first_snapshot": -24,
+      "eval_last_snapshot": -4,
+      "eval_only_filtered_players": false,
+      "exclude_media_nodes": false,
+      "img_dir": "best_mpp_non_binary",
+      "include_only_players": false,
+      "is_detailed_relabel": true,
+      "metric_id": "ndcg@50",
+      "min_epoch": 1503288000,
+      "num_of_days": 21,
+      "num_of_threads": 1,
+      "score_folders": [
+         "olr_a0.05_b1.00_Exp(b:0.500,n:86400.000)",
+         "olid_Exp(b:0.500,n:86400.000)",
+         "tpr_a0.85_b0.50",
+         "spr_snapshot_24_a0.85_i50",
+         "indeg_snapshot_6",
+         "hc_snapshot_24",
+         "nbm_snapshot_6"
+      ],
+      "use_binary_labels": true,
+      "use_cumulative_ndcg": false,
+      "uso_root_dir": "/mnt/61cb6df7-f940-4d96-95b3-7f435bd01376/sztaki/git/online-centrality/results/"
+   },
+   "description": "Evaluate and analyze the pre-computed centrality scores.",
+   "id": "9",
+   "name": "USOpen",
+   "notebooks": [
+      {
+         "is_clone": "no",
+         "kernel_type": "py3-env",
+         "name": "USOParams",
+         "path": "pipelines/USOParams.ipynb",
+         "pipeline_status": "off",
+         "type": "Parameters"
+      },
+      {
+         "dependencies": [
+            "FindMatchesUSO"
+         ],
+         "is_clone": "no",
+         "kernel_type": "py3-env",
+         "name": "ScheduleScoreUpdaterUSO",
+         "path": "ipython/usopen/ScheduleScoreUpdaterUSO.ipynb",
+         "pipeline_status": "off",
+         "type": "Experiment"
+      },
+      {
+         "dependencies": [
+            "ScheduleScoreUpdaterUSO"
+         ],
+         "is_clone": "no",
+         "kernel_type": "py3-env",
+         "name": "PredictPlayerUSO",
+         "path": "ipython/usopen/uso_predict_player.ipynb",
+         "pipeline_status": "on",
+         "type": "Experiment"
+      }
+   ],
+   "py_scripts": [],
+   "reports": []
+}
