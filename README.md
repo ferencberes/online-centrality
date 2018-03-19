@@ -26,8 +26,13 @@ edge stream in a dynamic network. It incorporates the elapsed time of edge activ
 
 # Data
 
-In this repository you can find the codebase that we are using during our research. **The USOpen 2017 dataset is available on the website of our [research group](https://dms.sztaki.hu/hu/letoltes/online-centrality-data-sets)** at the Institute for Computer Science and Control of the
+In this repository you can find the codebase that we are using in our research. **The USOpen 2017 dataset is available on the website of our [research group](https://dms.sztaki.hu/hu/letoltes/online-centrality-data-sets)** at the Institute for Computer Science and Control of the
 Hungarian Academy of Sciences.
+
+You can also download all related data sets with the following command
+```bash
+bash ./scripts/download_data.sh
+```
 
 # Cite
 
