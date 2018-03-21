@@ -19,7 +19,7 @@ edge stream in a dynamic network. It incorporates the elapsed time of edge activ
    source activate YOUR_CONDA_PY3_ENV
    ```
    * Install the following packages with *conda* or *pip*:
-      * **data processing:** pandas, numpy, bs4
+      * **data processing:** pandas, numpy
       * **scientific:** scipy, networkx 
       * **visualization:** matplotlib, seaborn
       * **general:** sys, os, math, re, json, shutil, operator, collections, multiprocessing, functools, itertools, datetime
@@ -33,6 +33,60 @@ You can also download all related data sets with the following command
 ```bash
 bash ./scripts/download_data.sh
 ```
+
+# Usage
+
+After you have downloaded the data sets (see previous section) you can run the experiments with the provided scripts or you can experiment with the Jupyter notebooks as well.
+
+You can simply run all the following steps with one script but it will take many time. Look for details in the next section (Calculate centrality scores).
+
+```bash
+source activate YOUR_CONDA_PY3_ENV
+bash ./scripts/run_all.sh
+```
+
+If you read further, you can see the details and instructions related to each task in our experimental setting. 
+
+## 1. Calculate centrality scores
+
+You can calculate centrality scores for hourly snapshots with the following script.
+
+```bash
+source activate YOUR_CONDA_PY3_ENV
+bash ./scripts/calculate_centrality_scores.sh
+```
+
+**It could take several hours** to calculate the scores for all parametrizations that is required for the following steps. That is the reason why we use **--ExecutePreprocessor.timeout=7200** configuration for  the **jupyter nbconvert** command. If the execution don't finish in 2 hours on your computer then you should increase this time limit.
+
+**Related notebooks (execute them in this order):**
+
+   * [parameter notebook](ipython/parameters/centrality_params.ipynb):  setting parameters for centrality score computation
+   * [score calculator notebook](ipython/experiments/centrality_score_computer.ipynb): export score files into folder **./data/centrality_scores/usopen_epoch_t505_d3600**.
+
+#### Notations of centrality scores
+
+   * *olr*: Online Centrality - our model
+   * *tpr*: Temporal PageRank
+   * *spr*: static PageRank
+   * *hc*: static Harmonic Centrality
+   * *nbm*: static negative-Beta Measure
+   * *indeg*: static indegree
+   * *olid*: decayed indegree
+
+## 2. Experiments
+
+You can run the experiments with the following script:
+
+```bash
+source activate YOUR_CONDA_PY3_ENV
+bash ./scripts/run_experiments.sh
+```
+
+**Related notebooks (execute them in this order):**
+
+   * [parameter notebook](ipython/parameters/USOParams.ipynb):  setting parameters for centrality score computation
+   * [USOpen evaluator notebook](ipython/experiments/uso_predict_player.ipynb): Evaluate centrality measure toplists based on daily tennis players of US Open 2017.
+   * [Concept drift notebook](ipython/experiments/ConceptDrift.ipynb): Unsupervised evaluation for concept drifts. 
 
 # Cite
 
@@ -55,4 +109,12 @@ Please cite our work if you use this code or the [Roland-Garros 2017 dataset](ht
 
 You can find the related codebase on a different [branch](https://github.com/ferencberes/online-centrality/tree/complex_networks_2017).
 
+# Troubleshooting
 
+If you get a **"TimeoutError: Cell execution timed out"** when you run any of the provided bash scripts then you should increase the execution time limit for the **jupyter nbconvert** command for the notebook that had broken down. You can do this by using
+
+```bash
+jupyter nbconvert --to notebook --execute  --ExecutePreprocessor.timeout=HIGHER\_TIME\_LIMIT BROKEN_DOWN_NOTEBOOK.ipynb
+```
+ 
+ or just execute the given notebook through the Jupyter browser.
