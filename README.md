@@ -1,7 +1,7 @@
 ﻿online-centrality
 =================
 
-This repository contains the code used in the Online Centrality research of Ferenc Béres, [Róbert Pálovics](https://github.com/rpalovics) and András A. Benczúr at the [Institute for Computer Science and Control of the
+This repository contains the code used in the Online Centrality research of [Ferenc Béres](https://ferencberes.github.io/), [Róbert Pálovics](https://github.com/rpalovics) and András A. Benczúr at the [Institute for Computer Science and Control of the
 Hungarian Academy of Sciences](https://dms.sztaki.hu/en).
 
 # Introduction
@@ -114,7 +114,7 @@ You can find the related codebase on a different [branch](https://github.com/fer
 If you get a **"TimeoutError: Cell execution timed out"** when you run any of the provided bash scripts then you should increase the execution time limit for the **jupyter nbconvert** command for the notebook that had broken down. You can do this by using
 
 ```bash
-jupyter nbconvert --to notebook --execute  --ExecutePreprocessor.timeout=HIGHER\_TIME\_LIMIT BROKEN_DOWN_NOTEBOOK.ipynb
+jupyter nbconvert --to notebook --execute  --ExecutePreprocessor.timeout=HIGHER_TIME_LIMIT BROKEN_DOWN_NOTEBOOK.ipynb
 ```
  
  or just execute the given notebook through the Jupyter browser.
