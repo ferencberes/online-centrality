@@ -43,27 +43,21 @@ def custom_katz(G,alpha,max_iter=1000,eps=0.0001, use_weights=True):
 def get_stream(G, iters, pr_alpha=0.85, katz_alpha=0.05, is_custom_katz=True, norm_outdegree=True, random_sample=True, weight='weight'):
     if norm_outdegree:
         norm = sum(dict(G.out_degree(weight='weight')).values())
-        sampling_edges = {e[:-1]: e[-1]['weight']/norm for e in G.edges(data=True)}
     else:
         norm = sum(dict(G.in_degree(weight='weight')).values())
-        sampling_edges = {e[:-1]: e[-1]['weight']/norm for e in G.edges(data=True)}
+    sampling_edges = {e[:-1]: e[-1]['weight']/norm for e in G.edges(data=True)}
     if random_sample:
-        stream = [sampling_edges.keys()[i] for i in np.random.choice(range(len(sampling_edges)), size=iters, p=sampling_edges.values())]
+        stream = [list(sampling_edges.keys())[i] for i in np.random.choice(range(len(sampling_edges)), size=iters, p=list(sampling_edges.values()))]
     else:
         stream, small_stream = [], list(G.edges())
         ss = len(small_stream)
         for i in range(iters):
             stream.append(small_stream[i % ss])
-    # personalized pagerank
-    if norm_outdegree:
-        personalization = {k: v / norm for k, v in dict(G.out_degree(weight='weight')).iteritems()}
-    else:
-        personalization = {k: v / norm for k, v in dict(G.in_degree(weight='weight')).iteritems()}
     pr_basic = nx.pagerank(G, alpha=pr_alpha, weight=weight)
     if is_custom_katz:
-       katz_basic = custom_katz(G,alpha=katz_alpha,max_iter=1000, use_weights=(weight == 'weight'))
+        katz_basic = custom_katz(G,alpha=katz_alpha,max_iter=1000, use_weights=(weight == 'weight'))
     else:
-       katz_basic = nx.katz_centrality(G,alpha=katz_alpha,max_iter=5000, weight=weight)
+        katz_basic = nx.katz_centrality(G,alpha=katz_alpha,max_iter=5000, weight=weight)
     return (stream, pr_basic, katz_basic)
 
 def get_snapshot_correlations(score_prefix, snapshot_id, delta, iters, static_c_items):

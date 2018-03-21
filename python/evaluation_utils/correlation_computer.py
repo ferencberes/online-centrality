@@ -4,7 +4,6 @@ import pandas as pd
 from scipy.stats import pearsonr,spearmanr,kendalltau,rankdata
 import itertools
 import numpy as np
-import numexpr as ne
 
 
 ### Basic correlation measures ###

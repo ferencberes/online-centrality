@@ -1,11 +1,13 @@
 #!/bin/bash
-echo "### Running parameter notebook 'RGParams.ipynb' ###"
+echo "### Running parameter notebook 'USOParams.ipynb' ###"
 pushd ./ipython/parameters
-jupyter nbconvert --to notebook --execute RGParams.ipynb
+jupyter nbconvert --to notebook --execute USOParams.ipynb
 popd
 pushd ./ipython/experiments
-echo "### Calculating non-constant ratios ###"
-jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=1800 roland_garros_olr_const_ratios.ipynb
+echo "### Running preprocessor ###"
+jupyter nbconvert --to notebook --execute  --ExecutePreprocessor.timeout=1800 ScheduleScoreUpdaterUSO.ipynb
 echo "### Running player predict experiment ###"
-jupyter nbconvert --to notebook --execute  --ExecutePreprocessor.timeout=1800 roland_garros_predict_player.ipynb
+jupyter nbconvert --to notebook --execute  --ExecutePreprocessor.timeout=1800 uso_predict_player.ipynb
+echo "### Concept Drift experiments ###"
+jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=1800 ConceptDrift.ipynb
 popd

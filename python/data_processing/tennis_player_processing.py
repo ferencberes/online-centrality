@@ -1,4 +1,3 @@
-import editdistance
 import numpy as np
 import pandas as pd
 import json
@@ -35,50 +34,6 @@ def export_matches(match_dict, file_name_prefix):
     
     with open("%s_screen_names.json" % file_name_prefix, "w") as f:
         json.dump(true_matches_screen_names, f)
-
-### edit distance ###
-
-def cast_to_lower(val):
-    return str(val).lower()
-
-def remove_spaces(val):
-    return str(val).replace(" ","")
-
-def eval_edit_dist(reference, comparable, use_lower, remove_space):
-    """Calculate edit distance between words. The comparison can be made after lowercasing or space-removing."""
-    vals = reference, comparable
-    if use_lower:
-        vals = list(map(cast_to_lower, vals))
-    if remove_space:
-        vals = list(map(remove_spaces, vals))
-    #print(vals)
-    return editdistance.eval(vals[0], vals[1])
-
-def calculate_edit_distance_matrix(reference_values, search_values, use_lower=True, remove_space=True):
-    """Calculate edit distance matrix with lowercasing and space-removal (optinal).
-       Rows: tennis player names from schedule (reference)
-       Columns: Twitter account names (screen_name) or displayed name of the account
-    """
-    row_size, col_size = len(reference_values), len(search_values)
-    edit_distances = np.zeros((row_size, col_size))
-    for i in range(row_size):
-        reference = reference_values[i] # try to find match for real tennis player in the schedule...
-        res = list(map(lambda x: eval_edit_dist(reference, x, use_lower=use_lower, remove_space=remove_space), search_values))
-        edit_distances[i,:] = res
-    return edit_distances
-
-def process_edit_distances(mx, reference_counter, reference_values, search_values):
-    """Extract search values that has minimum edit distance from reference values. Multiple hits are enabled."""
-    min_distances = mx.min(axis=1)
-    matches = []
-    for i in range(mx.shape[0]):
-        min_dist = min_distances[i]
-        min_indices = np.argwhere(mx[i,:] == min_dist)
-        min_indices = list(min_indices[:,0])#convert array to column
-        for idx in min_indices:
-            reference, min_match = reference_values[i], search_values[idx]
-            matches.append((reference, reference_counter[reference], min_match, min_dist))
-    return matches
 
 ### daily players ###
 

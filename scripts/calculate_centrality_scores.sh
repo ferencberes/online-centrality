@@ -5,5 +5,5 @@ jupyter nbconvert --to notebook --execute  centrality_params.ipynb
 popd
 echo "### Calculating centrality scores ###"
 pushd ./ipython/experiments
-jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=5400 centrality_score_computer.ipynb
+jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=7200 centrality_score_computer.ipynb
 popd

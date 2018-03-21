@@ -17,7 +17,7 @@ def getToy():
 
 def getSubgraph(G, N = 1000):
     Gcc = sorted(nx.connected_component_subgraphs(G.to_undirected()), key = len, reverse=True)
-    print len(Gcc)
+    print(len(Gcc))
     nodes = set()
     i = 0
 
@@ -40,7 +40,7 @@ def getGraph(edgesTS):
         edge = item[1]
         edges[edge] = edges.get(edge, 0.0) + 1.0
 
-    G.add_edges_from([(k[0],k[1], {'weight': v}) for k,v in edges.iteritems()])
+    G.add_edges_from([(k[0],k[1], {'weight': v}) for k,v in edges.items()])
     return G
 
 def readRealGraph(filepath):
@@ -58,7 +58,7 @@ def readRealGraph(filepath):
             tstamp = tstamp[1:-1]
             tstamp = datetime.strptime(tstamp, '%Y-%m-%d %H:%M:%S')
             t = items[2:4]
-            t = map(int,t)
+            t = [int(val) for val in t]
             if t[0] == t[1]:
                 continue
 
@@ -90,7 +90,6 @@ def weighted_DiGraph(n, seed = 1.0, mode='random', weights='random', handle_sink
         G = nx.DiGraph(G)
         G.remove_edges_from(G.selfloop_edges())
     else:
-        #print(os.listdir("./../../data/polina_graphs"))
         edgesTS, _, _ = readRealGraph("%s/%s.txt" % (real_data_dir,mode))
         G = getGraph(edgesTS)
         G = nx.DiGraph(G)
@@ -104,9 +103,10 @@ def weighted_DiGraph(n, seed = 1.0, mode='random', weights='random', handle_sink
                     if i != j:
                         G.add_edge(i, j, weight=1.0)
 
-    print nx.info(G)
+    print(nx.info(G))
 
     if weights == 'random':
+        #w = np.random.uniform(1e-5, 1.0, G.number_of_edges())
         w = 1-np.random.power(pow_exp, size=G.number_of_edges())
         w /= sum(w)
         c = 0
@@ -124,6 +124,7 @@ def weighted_DiGraph(n, seed = 1.0, mode='random', weights='random', handle_sink
     return G
 
 def change_weights(G, pow_exp=1.0):
+    #w = np.random.uniform(0.0, 1.0, G.number_of_edges())
     w = 1-np.random.power(pow_exp, size=G.number_of_edges())
     w /= sum(w)
     c = 0
