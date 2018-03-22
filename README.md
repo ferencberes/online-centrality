@@ -10,7 +10,7 @@ edge stream in a dynamic network. It incorporates the elapsed time of edge activ
 
 ## Cite
 
-I presented a [poster](https://github.com/ferencberes/online-centrality/blob/master/documents/complex_networks_2017_poster.pdf) at the 6th International Conference on Complex Networks and Their Applications. You can see our work in the [Book of Abstracts](http://complexnetworks.org/BookOfAbstracts.pdf#page=198) as well. 
+I presented a [poster](https://github.com/ferencberes/online-centrality/blob/master/documents/complex_networks_2017_poster.pdf) at the 6th International Conference on Complex Networks and Their Applications. You can see our work in the [Book of Abstracts](http://past.complexnetworks.org/BookOfAbstracts.pdf#page=198) as well. 
 
 Please cite our work if you use this code or the [Roland-Garros 2017 dataset](https://dms.sztaki.hu/hu/letoltes/roland-garros-2017-twitter-collection):
 
