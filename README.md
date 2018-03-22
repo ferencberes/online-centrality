@@ -92,7 +92,7 @@ bash ./scripts/run_experiments.sh
 
 ### Complex Networks 2017
 
-A former version of our research was presented at the 6th International Conference on Complex Networks and Their Applications. You can see our work in the [Book of Abstracts](http://complexnetworks.org/BookOfAbstracts.pdf#page=198) or on the [poster](https://github.com/ferencberes/online-centrality/blob/master/documents/complex_networks_2017_poster.pdf) that I presented.
+A former version of our research was presented at the 6th International Conference on Complex Networks and Their Applications. You can see our work in the [Book of Abstracts](http://past.complexnetworks.org/BookOfAbstracts.pdf#page=198) or on the [poster](https://github.com/ferencberes/online-centrality/blob/master/documents/complex_networks_2017_poster.pdf) that I presented.
 
 Please cite our work if you use this code or the [Roland-Garros 2017 dataset](https://dms.sztaki.hu/hu/letoltes/roland-garros-2017-twitter-collection):
 
