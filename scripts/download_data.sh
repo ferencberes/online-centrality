@@ -1,10 +1,15 @@
 #!/bin/bash
 mkdir -p ./data
 cd data
-wget https://dms.sztaki.hu/sites/dms.sztaki.hu/files/download/2018/usopen_raw_data.zip
-echo "USOpen data set was downloaded."
-unzip usopen_raw_data.zip
-echo "Compressed USOpen data set was unzipped."
+
+wget https://dms.sztaki.hu/sites/dms.sztaki.hu/files/download/2018/uo17_data.zip
+echo "UO17 data set was downloaded."
+unzip uo17_data.zip
+echo "Compressed UO17 data set was unzipped."
+wget https://dms.sztaki.hu/sites/dms.sztaki.hu/files/download/2018/rg17_data_0.zip
+echo "RG17 data set was downloaded."
+unzip rg17_data_0.zip
+echo "Compressed RG17 data set was unzipped."
 wget https://dms.sztaki.hu/sites/dms.sztaki.hu/files/download/2018/polina_graphs.zip
 echo "Small data sets were downloaded."
 unzip polina_graphs.zip

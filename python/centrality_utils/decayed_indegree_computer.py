@@ -1,28 +1,25 @@
-import os, multiprocessing, functools
+import sys, os
 import numpy as np
 from .base_computer import *
 from .weight_funtions import *
 
-def link2str(link):
-    return str((int(link[0]),int(link[1])))
+sys.path.insert(0,"../")
+from evaluation_utils.eval_utils import load_score_map
 
-class OnlineRankParams():
-    def __init__(self,alpha=0.05,beta=1.0,weight_function=ConstantWeighter()):
-        if alpha > 0 and alpha < 1:
-            self.alpha = alpha
-        else:
-            raise RuntimeError("'alpha' must be from interval (0,1)!")
-        if beta >= 0 and beta <= 1:
-            self.beta = beta
-        else:
-            raise RuntimeError("'beta' must be from interval [0,1]!")
+
+class DecayedIndegreeParams():
+    def __init__(self,weight_function=ConstantWeighter(),batch_score_part=""):
+        self.batch_score_part = batch_score_part
         self.weight_func = weight_function
         
     def __str__(self):
-        return "olr_a%0.2f_b%0.2f_%s" % (self.alpha,self.beta,str(self.weight_func))
-
-class OnlineRankComputer(BaseComputer):
-    """Implementation of Andras"s idea with multiple parameters: version 4.0"""
+        if self.batch_score_part != "":
+            return "did_%s_%s" % (self.batch_score_part.split("/")[0],str(self.weight_func))
+        else:
+            return "did_%s" % str(self.weight_func)
+        
+class DecayedIndegreeComputer(BaseComputer):
+    """Indegree with time decay function"""
     def __init__(self,nodes,edges,param_list,min_time=0,storage_ratio=1.8):
         self.param_list = param_list
         self.num_of_nodes, self.num_of_edges = len(nodes), len(edges)
@@ -33,44 +30,35 @@ class OnlineRankComputer(BaseComputer):
         self.max_edge_index = len(edges)
         self.edge_weights = np.zeros((stored_num_of_edges,len(self.param_list)))
         self.edge_last_activation = np.ones(stored_num_of_edges) * min_time
+        self.batch_score_maps = [None for i in range(len(self.param_list))]
+        self.batch_score_mins = [0.0 for i in range(len(self.param_list))]
         
-    def copy(self):
-        params_copy = list(self.param_list)
-        obj_copy = OnlineRankComputer([],[],params_copy)
-        obj_copy.num_of_nodes = self.num_of_nodes
-        obj_copy.node_indexes = self.node_indexes.copy()
-        obj_copy.edge_indexes = self.edge_indexes.copy()
-        obj_copy.online_ranks = np.copy(self.online_ranks)
-        obj_copy.max_edge_index = self.max_edge_index
-        obj_copy.edge_weights = np.copy(self.edge_weights)
-        obj_copy.edge_last_activation = np.copy(self.edge_last_activation)
-        obj_copy.node_last_activation = self.node_last_activation.copy()
-        return obj_copy
-    
-    def clear(self):
-        self.param_list = None
-        self.node_indexes = None
-        self.edge_indexes = None
-        self.online_ranks = None
-        self.max_edge_index = None
-        self.edge_weights = None
-        self.edge_last_activation = None
-        self.node_last_activation = None
-        
-    def get_updated_node_rank(self,time,graph,node_id,rating=None):
+    def get_updated_node_rank(self,time,graph,node_id):
         node_index = self.node_indexes[node_id]
-        hashed_in_edges = [link2str(link) for link in graph.in_edges(nbunch=[node_id])]
-        olr_values = [param.alpha for param in self.param_list]
+        # drop multi-edge instances
+        hashed_in_edges = [link2str(link) for link in set(graph.in_edges(nbunch=[node_id]))]
+        olr_values = np.zeros(len(self.param_list))
+        #num_found = 0
         for h_in_edge in hashed_in_edges:
             edge_index = self.edge_indexes[h_in_edge]  
             time_last_activation = self.edge_last_activation[edge_index]
             delta_time = time - time_last_activation
-            time_decaying_weights = [param.beta * param.weight_func.weight(delta_time) for param in self.param_list]
-            olr_values += self.edge_weights[edge_index,:] * time_decaying_weights
-        if rating != None: # combine updated value with old value based on rating
-            olr_values = rating * np.array(olr_values) + (1.0-rating) * self.online_ranks[node_index,:]
+            time_decaying_weights, batch_scores = [], []
+            for idx, param in enumerate(self.param_list):
+                time_decaying_weights.append(param.weight_func.weight(delta_time))
+                if self.batch_score_maps[idx] is not None:
+                    src, _ = str2link(h_in_edge)
+                    if float(src) in self.batch_score_maps[idx]:
+                        batch_scores.append(self.batch_score_maps[idx][float(src)])
+                        #num_found += 1
+                    else:
+                        batch_scores.append(self.batch_score_mins[idx])
+                else:
+                    batch_scores.append(1.0)
+            olr_values += np.array(batch_scores) * time_decaying_weights
+        #print("Num found: %i" % num_found)
         return node_index, olr_values # return updated ranks for scource node
-    
+
     def get_all_updated_node_ranks(self,time,graph):
         updated_scores = []
         for node in self.node_last_activation:
@@ -79,8 +67,8 @@ class OnlineRankComputer(BaseComputer):
             row = [node] + list(node_rank)
             updated_scores.append(row)
         return np.array(updated_scores)
-    
-    def update(self,edge,time,graph,snapshot_graph=None,rating=None):
+
+    def update(self,edge,time,graph,snapshot_graph=None):
         src, trg = int(edge[0]), int(edge[1])
         self.node_last_activation[src] = time
         self.node_last_activation[trg] = time
@@ -93,7 +81,7 @@ class OnlineRankComputer(BaseComputer):
             edge_index = self.max_edge_index
             self.edge_indexes[hashed_edge] = edge_index
             self.max_edge_index += 1
-        src_node_index, src_updated_ranks = self.get_updated_node_rank(time,graph,src,rating=rating)
+        src_node_index, src_updated_ranks = self.get_updated_node_rank(time,graph,src)
         self.online_ranks[src_node_index,:] = src_updated_ranks
         self.edge_weights[edge_index,:] = src_updated_ranks
         self.edge_last_activation[edge_index] = time
@@ -102,11 +90,18 @@ class OnlineRankComputer(BaseComputer):
         if not os.path.exists(experiment_folder):
             os.makedirs(experiment_folder)
         all_nodes_updated = self.get_all_updated_node_ranks(time,graph)
-        for j in range(len(self.param_list)):
-            tpr = self.param_list[j]
-            output_folder = "%s/%s" % (experiment_folder,tpr)
+        for j, param in enumerate(self.param_list):
+            output_folder = "%s/%s" % (experiment_folder, param)
             if not os.path.exists(output_folder):
                 os.makedirs(output_folder)
             active_arr = all_nodes_updated[:,[0,j+1]]
-            scores2file(active_arr,"%s/olr_%i.csv" % (output_folder,snapshot_index))
-        
+            scores2file(active_arr,"%s/did_%i.csv" % (output_folder,snapshot_index))
+            self.load_centrality_for_next_interval(j, param, snapshot_index, experiment_folder)
+            
+    def load_centrality_for_next_interval(self, param_idx, param, snapshot_index, score_root_dir):
+        if param.batch_score_part != "":
+            file_prefix = "%s/%s" % (score_root_dir, param.batch_score_part)
+            scores_df = load_score_map(file_prefix, snapshot_index).reset_index()
+            score_dict = dict(zip(scores_df["id"],scores_df["score"]))
+            self.batch_score_maps[param_idx] = score_dict
+            self.batch_score_mins[param_idx] = min(score_dict.values())

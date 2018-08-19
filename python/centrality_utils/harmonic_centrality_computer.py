@@ -22,17 +22,7 @@ class HarmonicCentralityComputer(BaseComputer):
         self.param_list = param_list
         self.hc = None
 
-    def copy(self):
-        params_copy = list(self.param_list)
-        obj_copy = HarmonicCentralityComputer(params_copy)
-        obj_copy.hc = np.copy(self.hc)
-        return obj_copy
-
-    def clear(self):
-        self.param_list = None
-        self.hc = None
-
-    def update(self, edge, graph, snapshot_graph, time=None, rating=None):
+    def update(self, edge, graph, snapshot_graph, time=None):
         """edge=(src,trg)"""
         # This is a static measure. It only needs to be updated at snapshot update
         pass

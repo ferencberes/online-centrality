@@ -23,20 +23,7 @@ class StaticNegativeBetaMeasureComputer(BaseComputer):
         self.graph_snapshots = [deque([]) for i in range(len(self.param_list))]
         self.stat_nbmes = None
 
-    def copy(self):
-        params_copy = list(self.param_list)
-        snapshots_copy = list(self.graph_snapshots)
-        obj_copy = StaticNegativeBetaMeasureComputer(params_copy)
-        obj_copy.graph_snapshots = snapshots_copy
-        obj_copy.stat_nbmes = np.copy(self.stat_nbmes)
-        return obj_copy
-
-    def clear(self):
-        self.param_list = None
-        self.graph_snapshots = None
-        self.stat_nbmes = None
-
-    def update(self,edge,graph,snapshot_graph,time=None,rating=None):
+    def update(self,edge,graph,snapshot_graph,time=None):
         """edge=(src,trg)"""
         # This is a static measure. It only needs to be updated at snapshot update
         pass
@@ -45,7 +32,7 @@ class StaticNegativeBetaMeasureComputer(BaseComputer):
         nbmes_df = pd.DataFrame()
         for i in range(len(self.param_list)):
             param = self.param_list[i]
-            G = graph if param.lookback_cnt == 0 else get_graph_from_snapshots(self, snapshot_graph, param, i)
+            G = nx.DiGraph(graph) if param.lookback_cnt == 0 else get_graph_from_snapshots(self, snapshot_graph, param, i)
             out_deg = dict(G.out_degree())
             # calculate weights for in edges
             rec_out_deg = dict([(n,1.0/out_deg[n] if out_deg[n] > 0 else 1.0) for n in out_deg])
@@ -66,9 +53,8 @@ class StaticNegativeBetaMeasureComputer(BaseComputer):
         self.stat_nbmes = self.calculate_neg_beta_measures(graph,snapshot_graph)
         if not os.path.exists(experiment_folder):
             os.makedirs(experiment_folder)
-        for j in range(len(self.param_list)):
-            neg_beta_mes = self.param_list[j]
-            output_folder = "%s/%s" % (experiment_folder,neg_beta_mes)
+        for j, param in enumerate(self.param_list):
+            output_folder = "%s/%s" % (experiment_folder,param)
             if not os.path.exists(output_folder):
                 os.makedirs(output_folder)
             pos_idx = self.stat_nbmes[:,j+1] > 0 

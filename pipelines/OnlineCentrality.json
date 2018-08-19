@@ -1,19 +1,6 @@
 {
    "config_path": "pipelines/OnlineCentrality.json",
-   "default_config": {
-      "batch_prefix": "",
-      "data_file_prefix": "/mnt/61cb6df7-f940-4d96-95b3-7f435bd01376/sztaki/git/online-centrality/data/raw/",
-      "dataset_id": "usopen",
-      "day_index_threshold": 505,
-      "edge_delta": 982,
-      "edge_index_threshold": 494694,
-      "epoch_delta": 3600,
-      "experiment_path": "/mnt/61cb6df7-f940-4d96-95b3-7f435bd01376/sztaki/git/online-centrality/data/centrality_scores//usopen_epoch_t505_d3600",
-      "min_epoch": 1503288000,
-      "olr_beta": 1.0,
-      "score_folder_prefix": "/mnt/61cb6df7-f940-4d96-95b3-7f435bd01376/sztaki/git/online-centrality/data/centrality_scores/",
-      "time_type": "epoch"
-   },
+   "default_config": {},
    "description": "Calculate centrality scores for several models.",
    "id": "0",
    "name": "OnlineCentrality",

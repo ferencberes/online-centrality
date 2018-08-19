@@ -1,6 +1,9 @@
 import pandas as pd
 import networkx as nx
 
+def link2str(link):
+    return str((int(link[0]),int(link[1])))
+
 def scores2file(score_map,output_file):
     """Export scores to .csv files"""
     score_df = pd.DataFrame(score_map,columns=["node_id","score"])
@@ -20,13 +23,8 @@ def get_graph_from_snapshots(comp, new_snapshot_graph, param, idx):
     return U    
     
 class BaseComputer():
-    def copy(self):
-        pass
     
-    def clear(self):
-        pass
-    
-    def update(self,edge,time=None,graph=None,snapshot_graph=None,rating=None):
+    def update(self,edge,time=None,graph=None,snapshot_graph=None):
         pass
     
     def save_snapshot(self,experiment_folder,snapshot_index,time=None,graph=None,snapshot_graph=None):

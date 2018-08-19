@@ -22,21 +22,8 @@ class StaticHarmonicCentralityComputer(BaseComputer):
         self.param_list = param_list
         self.graph_snapshots = [deque([]) for i in range(len(self.param_list))]
         self.stat_hc = None
-
-    def copy(self):
-        params_copy = list(self.param_list)
-        snapshots_copy = list(self.graph_snapshots)
-        obj_copy = StaticHarmonicCentralityComputer(params_copy)
-        obj_copy.graph_snapshots = snapshots_copy
-        obj_copy.stat_hc = np.copy(self.stat_hc)
-        return obj_copy
-    
-    def clear(self):
-        self.param_list = None
-        self.graph_snapshots = None
-        self.stat_hc = None
         
-    def update(self,edge,graph,snapshot_graph,time=None,rating=None):
+    def update(self,edge,graph,snapshot_graph,time=None):
         """edge=(src,trg)"""
         # This is a static measure. It only needs to be updated at snapshot update
         pass
@@ -45,7 +32,7 @@ class StaticHarmonicCentralityComputer(BaseComputer):
         hc_df = pd.DataFrame()
         for i in range(len(self.param_list)):
             param = self.param_list[i]
-            G = graph if param.lookback_cnt == 0 else get_graph_from_snapshots(self, snapshot_graph, param, i)
+            G = nx.DiGraph(graph) if param.lookback_cnt == 0 else get_graph_from_snapshots(self, snapshot_graph, param, i)
             hc_values = nx.harmonic_centrality(G)
             # we want to included zero hc value nodes in output files as well, that is why we add epsilon!
             hc_with_epsilon = pd.Series(hc_values) + epsilon
@@ -58,9 +45,8 @@ class StaticHarmonicCentralityComputer(BaseComputer):
         self.stat_hc = self.calculate_harmonic_centralities(graph,snapshot_graph)
         if not os.path.exists(experiment_folder):
             os.makedirs(experiment_folder)
-        for j in range(len(self.param_list)):
-            hc = self.param_list[j]
-            output_folder = "%s/%s" % (experiment_folder,hc)
+        for j, param in enumerate(self.param_list):
+            output_folder = "%s/%s" % (experiment_folder,param)
             if not os.path.exists(output_folder):
                 os.makedirs(output_folder)
             pos_idx = self.stat_hc[:,j+1] > 0 
