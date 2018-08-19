@@ -1,11 +1,7 @@
 ﻿Temporal Katz centrality
 ========================
 
-This repository contains the code used in the shared research of [Ferenc Béres](https://github.com/ferencberes), [Róbert Pálovics](https://github.com/rpalovics) and András A. Benczúr with title:
-
-**Temporal Walk Based Centrality Metric for Graph Streams**.
-
-If you are interested then you can read the full [paper](https://appliednetsci.springeropen.com/articles/10.1007/s41109-018-0080-5) or check out the [poster](documents/mlg_2018_poster.pdf) that I presented at the 14th International Workshop on
+This repository contains the code related to the shared research of [Ferenc Béres](https://github.com/ferencberes), [Róbert Pálovics](https://github.com/rpalovics) and András A. Benczúr. If you are interested then you can read the full [paper](https://appliednetsci.springeropen.com/articles/10.1007/s41109-018-0080-5) or check out the [poster](documents/mlg_2018_poster.pdf) that I presented at the 14th International Workshop on
 Mining and Learning with Graphs (KDD18).
 
 # Cite
@@ -13,13 +9,18 @@ Mining and Learning with Graphs (KDD18).
 Please cite our work if you use this code or the [Twitter tennis datasets](https://dms.sztaki.hu/en/letoltes/temporal-katz-centrality-data-sets) that we collected:
 
 ```
-@conference{beres17oc,
-  author       = {Ferenc Béres and András A. Benczúr}, 
-  title        = {Online Centrality in Temporally Evolving Networks},
-  booktitle    = {Book of Abstracts of the 6th International Conference on Complex Networks and Their Applications},
-  pages        = {184--186},
-  year         = {2017},
-  isbn = {978-2-9557050-2-5},
+@Article{Beres2018,
+author="B{\'e}res, Ferenc
+and P{\'a}lovics, R{\'o}bert
+and Ol{\'a}h, Anna
+and Bencz{\'u}r, Andr{\'a}s A.",
+title="Temporal walk based centrality metric for graph streams",
+journal="Applied Network Science",
+year="2018",
+volume="3",
+number="1",
+pages="32",
+issn="2364-8228",
 }
 ```
 
