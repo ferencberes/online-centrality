@@ -1,13 +1,30 @@
-﻿online-centrality
-=================
+﻿Temporal Katz centrality
+========================
 
-This repository contains the code used in the Online Centrality research of [Ferenc Béres](https://ferencberes.github.io/), [Róbert Pálovics](https://github.com/rpalovics) and András A. Benczúr at the [Institute for Computer Science and Control of the
-Hungarian Academy of Sciences](https://dms.sztaki.hu/en).
+This repository contains the code used in the shared research of [Ferenc Béres](https://github.com/ferencberes), [Róbert Pálovics](https://github.com/rpalovics) and András A. Benczúr with title:
 
-# Introduction
+**Temporal Walk Based Centrality Metric for Graph Streams**.
 
-Online Centrality is a centrality measure updateable by the
-edge stream in a dynamic network. It incorporates the elapsed time of edge activations as time decay.
+If you are interested then you can read the full [paper](https://appliednetsci.springeropen.com/articles/10.1007/s41109-018-0080-5) or check out the [poster](documents/mlg_2018_poster.pdf) that I presented at the 14th International Workshop on
+Mining and Learning with Graphs (KDD18).
+
+# Cite
+
+Please cite our work if you use this code or the [Twitter tennis datasets](https://dms.sztaki.hu/en/letoltes/temporal-katz-centrality-data-sets) that we collected:
+
+```
+@conference{beres17oc,
+  author       = {Ferenc Béres and András A. Benczúr}, 
+  title        = {Online Centrality in Temporally Evolving Networks},
+  booktitle    = {Book of Abstracts of the 6th International Conference on Complex Networks and Their Applications},
+  pages        = {184--186},
+  year         = {2017},
+  isbn = {978-2-9557050-2-5},
+}
+```
+
+A former version of our research was presented at the 6th International Conference on Complex Networks and Their Applications. You can find the related codebase on a different [branch](https://github.com/ferencberes/online-centrality/tree/complex_networks_2017).
+
 
 # Requirements
 
@@ -26,7 +43,7 @@ edge stream in a dynamic network. It incorporates the elapsed time of edge activ
 
 # Data
 
-In this repository you can find the codebase that we are using in our research. **The [USOpen 2017](https://dms.sztaki.hu/hu/letoltes/online-centrality-data-sets) and [Roland-Garros 2017](https://dms.sztaki.hu/hu/letoltes/roland-garros-2017-twitter-collection) Twitter datasets are available on the website of our research group**.
+**The US Open 2017 (UO17) and Roland-Garros 2017 (RG17) Twitter datasets are available on the [website](https://dms.sztaki.hu/hu/letoltes/temporal-katz-centrality-data-sets) of our research group.
 
 You can also download all related data sets with the following command
 ```bash
@@ -44,7 +61,9 @@ source activate YOUR_CONDA_PY3_ENV
 bash ./scripts/run_all.sh
 ```
 
-If you read further, you can see the details and instructions related to each task in our experimental setting. 
+If you read further, you can see the details and instructions related to each task in our experimental setting.
+
+**NOTE: In most of the notebooks you have to select from the tennis dataset "rg17" or "uo17".**
 
 ## 1. Calculate centrality scores
 
@@ -59,18 +78,18 @@ bash ./scripts/calculate_centrality_scores.sh
 
 **Related notebooks (execute them in this order):**
 
-   * [parameter notebook](ipython/parameters/centrality_params.ipynb):  setting parameters for centrality score computation
-   * [score calculator notebook](ipython/experiments/centrality_score_computer.ipynb): export score files into folder **./data/centrality_scores/usopen_epoch_t505_d3600**.
+   * [Centraity score computer](ipython/experiments/CentralityScoreComputer.ipynb): export score files into folder **./data/DATASET_ID/centrality_scores/**.
 
 #### Notations of centrality scores
 
-   * *olr*: Online Centrality - our model
-   * *tpr*: Temporal PageRank
+   * *tk*: temporal Katz centrality
+   * *ttk*: truncated temporal Katz centrality
+   * *tpr*: temporal PageRank
    * *spr*: static PageRank
    * *hc*: static Harmonic Centrality
    * *nbm*: static negative-Beta Measure
    * *indeg*: static indegree
-   * *olid*: decayed indegree
+   * *did*: decayed indegree
 
 ## 2. Experiments
 
@@ -83,30 +102,7 @@ bash ./scripts/run_experiments.sh
 
 **Related notebooks (execute them in this order):**
 
-   * [parameter notebook](ipython/parameters/USOParams.ipynb):  setting parameters for centrality score computation
-   * [USOpen evaluator notebook](ipython/experiments/uso_predict_player.ipynb): Evaluate centrality measure toplists based on daily tennis players of US Open 2017.
-   * [Concept drift notebook](ipython/experiments/ConceptDrift.ipynb): Unsupervised evaluation for concept drifts. 
-
-# Cite
-
-### Complex Networks 2017
-
-A former version of our research was presented at the 6th International Conference on Complex Networks and Their Applications. You can see our work in the [Book of Abstracts](http://past.complexnetworks.org/BookOfAbstracts.pdf#page=198) or on the [poster](https://github.com/ferencberes/online-centrality/blob/master/documents/complex_networks_2017_poster.pdf) that I presented.
-
-Please cite our work if you use this code or the [Roland-Garros 2017 dataset](https://dms.sztaki.hu/hu/letoltes/roland-garros-2017-twitter-collection):
-
-```
-@conference{beres17oc,
-  author       = {Ferenc Béres and András A. Benczúr}, 
-  title        = {Online Centrality in Temporally Evolving Networks},
-  booktitle    = {Book of Abstracts of the 6th International Conference on Complex Networks and Their Applications},
-  pages        = {184--186},
-  year         = {2017},
-  isbn = {978-2-9557050-2-5},
-}
-```
-
-You can find the related codebase on a different [branch](https://github.com/ferencberes/online-centrality/tree/complex_networks_2017).
+   * [Schedule Score Updater](ipython/experiments/ScheduleScoreUpdater.ipynb): Extract relevant nodes related to daily tennis player accounts. Prepare labels for the supervised evaluation.
 
 # Troubleshooting
 
