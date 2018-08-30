@@ -59,4 +59,4 @@ class StaticNegativeBetaMeasureComputer(BaseComputer):
                 os.makedirs(output_folder)
             pos_idx = self.stat_nbmes[:,j+1] > 0 
             active_arr = self.stat_nbmes[pos_idx][:,[0,j+1]]
-            scores2file(active_arr,"%s/ndm_%i.csv" % (output_folder,snapshot_index))
+            scores2file(active_arr,"%s/nbm_%i.csv" % (output_folder,snapshot_index))

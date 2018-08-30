@@ -4,6 +4,7 @@ import pandas as pd
 from scipy.stats import pearsonr,spearmanr,kendalltau,rankdata
 import itertools
 import numpy as np
+import numexpr as ne
 
 
 ### Basic correlation measures ###
@@ -102,17 +103,17 @@ def computeWKendall(day_1,day_2,ranked_input=False):
 
     for i in range(n):
         for j in range(i+1,n):
-            weightXY= 1.0/rankY[i]+1.0/rankY[j]
-            weightX=1.0/rankX[i]+1.0/rankX[j];
+            #weightXY= 1.0/rankY[i]+1.0/rankY[j]
+            #weightX=1.0/rankX[i]+1.0/rankX[j];
             weightY=1.0/rankY[i]+1.0/rankY[j];
             termX=np.sign(rankX[i]-rankX[j]);
             termY=np.sign(rankY[i]-rankY[j]);
             denomX=denomX+(termX)**2;
             denomY=denomY+(termY)**2;
-            denomXW=denomXW+(termX)**2*weightX;
+            denomXW=denomXW+(termX)**2*weightY;
             denomYW=denomYW+(termY)**2*weightY;
             num=num+termX*termY;
-            numW=numW+termX*termY*weightXY;
+            numW=numW+termX*termY*weightY;
 
     Kendall=num/math.sqrt(denomX*denomY);
     WKendall=numW/math.sqrt(denomXW*denomYW);
@@ -248,6 +249,6 @@ def fast_weighted_kendall(x, y):
     data_table = pd.concat([data_table,con_dis_data], axis=1)
     numW = sum(data_table.apply(lambda x: 1/x['rank_A']*(x['concordant']-x['discordant']), axis=1))
     denomX = sum(data_table.apply(lambda x: 1/x['rank_A']*(x['no_tie_A']), axis=1))
-    denomY = sum(data_table.apply(lambda x: 1/x['rank_B']*(x['no_tie_B']), axis=1))
+    denomY = sum(data_table.apply(lambda x: 1/x['rank_A']*(x['no_tie_B']), axis=1))
     #print(denomX, denomY, numW)
     return data_table, numW/math.sqrt(denomX*denomY)
