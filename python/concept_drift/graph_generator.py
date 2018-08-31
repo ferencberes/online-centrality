@@ -5,8 +5,6 @@ from datetime import datetime, timedelta
 import os.path
 import matplotlib.pyplot as plt
 
-real_data_dir = "./../../data/polina_graphs/"
-
 def getToy():
     G = nx.DiGraph()
     G.add_edges_from([(1,2,{'weight': 1.0}), (3,2, {'weight': 1.0})])
@@ -75,7 +73,7 @@ def readRealGraph(filepath):
     fd.close()
     return edgesTS, nodes, edges
 
-def weighted_DiGraph(n, seed = 1.0, mode='random', weights='random', handle_sinks=True, pow_exp=1.0):
+def weighted_DiGraph(n, seed = 1.0, mode='random', weights='random', handle_sinks=True, pow_exp=1.0, data_prefix=None):
     if mode == 'ER':
         G = nx.erdos_renyi_graph(n, p=0.1, directed=True, seed = seed)
     elif mode == 'PL':
@@ -89,12 +87,14 @@ def weighted_DiGraph(n, seed = 1.0, mode='random', weights='random', handle_sink
         G = nx.scale_free_graph(n)
         G = nx.DiGraph(G)
         G.remove_edges_from(G.selfloop_edges())
-    else:
-        edgesTS, _, _ = readRealGraph("%s/%s.txt" % (real_data_dir,mode))
+    elif data_prefix != None:
+        edgesTS, _, _ = readRealGraph("%s/%s.txt" % (data_prefix,mode))
         G = getGraph(edgesTS)
         G = nx.DiGraph(G)
         G.remove_edges_from(G.selfloop_edges())
         G = nx.DiGraph(getSubgraph(G, n))
+    else:
+        raise RuntimeError("You must provide 'data_prefix' to load real datasets.")
     
     if handle_sinks:
         for i in G.nodes():

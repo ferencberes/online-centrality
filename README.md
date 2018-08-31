@@ -77,9 +77,9 @@ bash ./scripts/calculate_centrality_scores.sh
 
 **It could take several hours** to calculate the scores for all parametrizations that is required for the following steps. That is the reason why we use **--ExecutePreprocessor.timeout=7200** configuration for  the **jupyter nbconvert** command. If the execution don't finish in 2 hours on your computer then you should increase this time limit.
 
-### Related notebooks:
+### Related script:
 
-   * [Centraity Score Computer](ipython/experiments/CentralityScoreComputer.ipynb): export score files into folder **./data/DATASET_ID/centrality_scores/**.
+   * [Centraity Score Computer](experiments/CentralityScoreComputer.py): export score files into folder **./data/DATASET_ID/centrality_scores/**.
 
 ### Notations of centrality measures
 
@@ -107,8 +107,8 @@ After you have run the script above, you can find several files related to the e
 
 ### Related notebooks (execute them in this order):
 
-   1. [Schedule Score Updater](ipython/experiments/ScheduleScoreUpdater.ipynb): Extract relevant nodes of the Twitter mention networks *(daily tennis player accounts)*. Prepare labels for the supervised evaluation.
-   2. [Predict Tennis Player](ipython/experiments/PredictTennisPlayer.ipynb): Supervised evaluation for daily tennis player prediction based only on network centrality measures. The performance of temporal Katz centrality is compared with several baselines. **You must run [Centraity Score Computer](ipython/experiments/CentralityScoreComputer.ipynb) and [Schedule Score Updater](ipython/experiments/ScheduleScoreUpdater.ipynb) notebooks before executing this notebook**. You have to specify the list of **score\_id**s (e.g. spr_snapshot_12_a0.85_i100) that you want to evaluate for Normalized Discounted Cumulative Gain (NDCG).
+   1. [Schedule Score Updater](experiments/ScheduleScoreUpdater.ipynb): Extract relevant nodes of the Twitter mention networks *(daily tennis player accounts)*. Prepare labels for the supervised evaluation.
+   2. [Predict Tennis Player](experiments/PredictTennisPlayer.ipynb): Supervised evaluation for daily tennis player prediction based only on network centrality measures. The performance of temporal Katz centrality is compared with several baselines. **You must run [Centraity Score Computer](experiments/CentralityScoreComputer.py) and [Schedule Score Updater](experiments/ScheduleScoreUpdater.ipynb) notebooks before executing this notebook**. You have to specify the list of **score\_id**s (e.g. spr_snapshot_12_a0.85_i100) that you want to evaluate for Normalized Discounted Cumulative Gain (NDCG).
 
 # Troubleshooting
 
