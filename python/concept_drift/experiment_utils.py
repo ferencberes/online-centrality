@@ -1,13 +1,14 @@
 import numpy as np
+import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
 from collections import Counter
-from scipy.stats import pearsonr, spearmanr
-import sys
+from scipy.stats import pearsonr, spearmanr, kendalltau
+import sys, multiprocessing, functools
 
 sys.path.insert(0,"../")
 import evaluation_utils.eval_utils as eu
-
+from evaluation_utils.correlation_computer import fast_weighted_kendall
 from numpy.linalg import eigvals
 
 def get_1_per_lambda(A):
@@ -85,24 +86,28 @@ def get_stream(G, iters, pr_alpha=0.85, katz_alphas=[0.05], katz_max_iter=2000, 
             raise
     return (stream, pr_basic, katz_basic_list)
 
-def calculate_self_correlation(c_prefix, idx_order, snapshots, visu=True):
-    values = []
-    for snapshot_idx in snapshots:
-        score_df_x = eu.load_score_map(c_prefix, snapshot_idx, epsilon=0.0)#.reset_index()
-        x = [score_df_x.loc[k]["score"] for k in idx_order]
-        values.append(x)
-    pe_corrs = [pearsonr(values[i], values[i+1])[0] for i in range(len(snapshots)-1)]
-    sp_corrs = [spearmanr(values[i], values[i+1])[0] for i in range(len(snapshots)-1)]
-    if visu:
-        plt.figure(figsize=(20,5))
-        plt.plot(snapshots[:-1],pe_corrs, c='b',label="pearson")
-        plt.plot(snapshots[:-1],sp_corrs, c='g',label="spearman")
-        plt.legend(loc=8)
-        plt.title(c_prefix.split("/")[-2])
-    return [pe_corrs, sp_corrs]
+def get_top_k_centrality(centrality_item, k=None):
+    c_nodes, c_vals = centrality_item
+    c_scores = list(zip(c_nodes, c_vals))
+    c_df = pd.DataFrame(c_scores, columns=["node_id","score"]).sort_values("score", ascending=False)
+    if k != None:
+        c_df = c_df.head(k)
+    return list(c_df["node_id"]), list(c_df["score"])
 
-def get_snapshot_correlations(score_prefix, snapshot_id, delta, iters, static_c_items):
+def get_sample_index(eval_snapshots, snapshot_id):
+    if eval_snapshots.index(snapshot_id) < len(eval_snapshots) / 3:
+        sample_index = 0
+    elif eval_snapshots.index(snapshot_id) < 2 * len(eval_snapshots) / 3:
+        sample_index = 1
+    else:
+        sample_index = 2
+    return sample_index
+
+def get_snapshot_correlations(eval_snapshots, score_prefix, static_c_item, k, snapshot_id):
     """Compare centrality measure to ground truth static centrality"""
+    # select proper sample
+    sample_index = get_sample_index(eval_snapshots, snapshot_id)
+    ordered_keys, ordered_scores = get_top_k_centrality(static_c_item[sample_index],k)
     # load score
     score_df = eu.load_score_map(score_prefix, snapshot_id, epsilon=0.0).reset_index()
     score_df["id"] = score_df.astype("i")
@@ -110,29 +115,25 @@ def get_snapshot_correlations(score_prefix, snapshot_id, delta, iters, static_c_
     w = score_df["score"].sum()
     score_df["score"] = score_df["score"] / w
     score_map = dict(zip(score_df["id"],score_df["score"]))
-    # select relevance
-    if snapshot_id*delta < iters:
-        ordered_keys, ordered_scores = static_c_items[0]
-    elif snapshot_id*delta < 2*iters:
-        ordered_keys, ordered_scores = static_c_items[1]
-    else:
-        ordered_keys, ordered_scores = static_c_items[2]
-    
+    augmented_score_values = np.array([score_map.get(x,0.0) for x in ordered_keys])
     # calculate correlations
-    augmented_score_values = [score_map.get(x,0.0) for x in ordered_keys]
-    res = []
-    return [snapshot_id, pearsonr(augmented_score_values, ordered_scores)[0], spearmanr(augmented_score_values, ordered_scores)[0]]
+    pearson_val = pearsonr(augmented_score_values, ordered_scores)[0]
+    spearman_val = spearmanr(augmented_score_values, ordered_scores)[0]
+    kendall_val = kendalltau(augmented_score_values, ordered_scores)[0]
+    # custom code
+    w_kendall_val = fast_weighted_kendall(augmented_score_values, ordered_scores)[1]
+    snapshot_vector = [snapshot_id, pearson_val, spearman_val, kendall_val, w_kendall_val]
+    return snapshot_vector
 
-def get_correlations(score_prefix, snapshots, delta, iters, static_c_items, visu=True):
-    corrs = np.array([get_snapshot_correlations(score_prefix, i, delta, iters, static_c_items) for i in snapshots])
-    score_name = score_prefix.split("/")[-2]
-    if visu:
-        plt.figure(figsize=(20,5))
-        #plt.plot(corrs[:,0],corrs[:,1],label="pearson")
-        plt.plot(corrs[:,0],corrs[:,2],label="spearman")
-        plt.legend(loc=8)
-        plt.xlabel("Snapshot: %i edges by each" % delta)
-        plt.title(score_name)
+def get_correlations(score_prefix, snapshots, static_c_item, k=None, n_threads=1):
+    if n_threads > 1:
+        f_partial = functools.partial(get_snapshot_correlations, snapshots, score_prefix, static_c_item, k)
+        pool = multiprocessing.Pool(processes=n_threads)
+        corrs = np.array(pool.map(f_partial, snapshots))
+        pool.close()
+        pool.join()
     else:
-        print(score_name,"pearson:",np.mean(corrs[:,1]),"spearman:",np.mean(corrs[:,2]))
+        corrs = np.array([get_snapshot_correlations(snapshots, score_prefix, static_c_item, k, i) for i in snapshots])
+    score_name = score_prefix.split("/")[-2]
+    print(score_name,"pearson:",np.mean(corrs[:,1]),"spearman:",np.mean(corrs[:,2]),"kendall:",np.mean(corrs[:,3]),"w_kendall:",np.mean(corrs[:,4]))
     return corrs

@@ -109,6 +109,7 @@ After you have run the script above, you can find several files related to the e
 
    1. [Schedule Score Updater](experiments/ScheduleScoreUpdater.ipynb): Extract relevant nodes of the Twitter mention networks *(daily tennis player accounts)*. Prepare labels for the supervised evaluation.
    2. [Predict Tennis Player](experiments/PredictTennisPlayer.ipynb): Supervised evaluation for daily tennis player prediction based only on network centrality measures. The performance of temporal Katz centrality is compared with several baselines. **You must run [Centraity Score Computer](experiments/CentralityScoreComputer.py) and [Schedule Score Updater](experiments/ScheduleScoreUpdater.ipynb) notebooks before executing this notebook**. You have to specify the list of **score\_id**s (e.g. spr_snapshot_12_a0.85_i100) that you want to evaluate for Normalized Discounted Cumulative Gain (NDCG).
+   3. [Concept Drift](experiments/ConceptDrift.ipynb): Unsupervised experiment that show that temporal Katz centrality can adapt to changes in the edges distribution.
 
 # Troubleshooting
 

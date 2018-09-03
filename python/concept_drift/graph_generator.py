@@ -73,7 +73,7 @@ def readRealGraph(filepath):
     fd.close()
     return edgesTS, nodes, edges
 
-def weighted_DiGraph(n, seed = 1.0, mode='random', weights='random', handle_sinks=True, pow_exp=1.0, data_prefix=None):
+def weighted_DiGraph(n, seed = 1.0, mode='random', weights='random', handle_sinks=False, pow_exp=1.0, data_prefix=None):
     if mode == 'ER':
         G = nx.erdos_renyi_graph(n, p=0.1, directed=True, seed = seed)
     elif mode == 'PL':
