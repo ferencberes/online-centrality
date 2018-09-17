@@ -50,7 +50,7 @@ You can also download all related data sets with the following command
 ```bash
 bash ./scripts/download_data.sh
 ```
-Notations of centrality scores
+
 # Usage
 
 After you have downloaded the data sets (see previous section) you can run the experiments with the provided scripts or you can experiment with Jupyter notebooks as well.
