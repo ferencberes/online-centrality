@@ -1,0 +1,12 @@
+name: YOUR_CONDA_PY3_ENV
+dependencies:
+  - python=3.5
+  - pandas
+  - numpy
+  - networkx
+  - ipython
+  - jupyter
+  - matplotlib
+  - seaborn
+channels:
+  - conda-forge
