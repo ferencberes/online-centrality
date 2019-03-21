@@ -8,5 +8,6 @@ dependencies:
   - jupyter
   - matplotlib
   - seaborn
+  - numexpr
 channels:
   - conda-forge
