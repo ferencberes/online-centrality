@@ -30,10 +30,10 @@ A former version of our research was presented at the 6th International Conferen
 # Requirements
 
    * UNIX environment
-   * **Python 3.5** conda environment with pre-installed jupyter:
+   * **Python 3.5** conda environment with pre-installed jupyter. From the main directory run:
 
    ```bash
-   conda create -n YOUR_CONDA_PY3_ENV python=3.5 jupyter
+   conda-env create -f meta.yaml
    source activate YOUR_CONDA_PY3_ENV
    ```
    * Install the following packages with *conda* or *pip*:
