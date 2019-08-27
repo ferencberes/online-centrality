@@ -9,7 +9,7 @@ Mining and Learning with Graphs (KDD18).
 Please cite our work if you use this code or the [Twitter tennis datasets](https://dms.sztaki.hu/en/letoltes/temporal-katz-centrality-data-sets) that we collected:
 
 ```
-@Article{Beres2018,
+@Article{Béres2018,
 author="B{\'e}res, Ferenc
 and P{\'a}lovics, R{\'o}bert
 and Ol{\'a}h, Anna
@@ -20,7 +20,6 @@ year="2018",
 volume="3",
 number="1",
 pages="32",
-issn="2364-8228",
 }
 ```
 
