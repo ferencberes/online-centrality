@@ -18,8 +18,8 @@ title="Temporal walk based centrality metric for graph streams",
 journal="Applied Network Science",
 year="2018",
 volume="3",
-number="1",
-pages="32",
+number="32",
+pages="26",
 }
 ```
 
