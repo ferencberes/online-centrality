@@ -1,7 +1,6 @@
-import sys, os, shutil
+import os, shutil
 import numpy as np
-sys.path.append('../')
-import evaluation_utils.eval_utils as eu
+import temporalkatz.evaluation_utils.eval_utils as eu
 
 def get_interval_bounds(num_of_days, lookback_size=2*24):
     interval_bounds = []

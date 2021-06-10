@@ -2,10 +2,7 @@ import sys, os
 import numpy as np
 from .base_computer import *
 from .weight_funtions import *
-
-sys.path.insert(0,"../")
-from evaluation_utils.eval_utils import load_score_map
-
+from temporalkatz.evaluation_utils.eval_utils import load_score_map
 
 class DecayedIndegreeParams():
     def __init__(self,weight_function=ConstantWeighter(),batch_score_part=""):

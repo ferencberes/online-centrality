@@ -5,10 +5,8 @@ import matplotlib.pyplot as plt
 from collections import Counter
 from scipy.stats import pearsonr, spearmanr, kendalltau
 import sys, multiprocessing, functools
-
-sys.path.insert(0,"../")
-import evaluation_utils.eval_utils as eu
-from evaluation_utils.correlation_computer import fast_weighted_kendall
+import temporalkatz.evaluation_utils.eval_utils as eu
+from temporalkatz.evaluation_utils.correlation_computer import fast_weighted_kendall
 from numpy.linalg import eigvals
 
 def get_1_per_lambda(A):

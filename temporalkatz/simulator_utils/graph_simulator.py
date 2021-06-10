@@ -1,7 +1,5 @@
 import networkx as nx
-import sys
-sys.path.insert(0,"../")
-from centrality_utils.base_computer import BaseComputer
+from temporalkatz.centrality_utils.base_computer import BaseComputer
 from .graph_extractor import store_edges
 
 class OnlineGraphSimulator(BaseComputer):

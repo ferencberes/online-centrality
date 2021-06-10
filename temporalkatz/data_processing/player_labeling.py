@@ -1,8 +1,6 @@
 import pandas as pd
 import json, datetime, sys, os
-
-sys.path.insert(0,"../")
-from centrality_utils.base_computer import scores2file
+from temporalkatz.centrality_utils.base_computer import scores2file
 
 ### Time Conversions ###
 
