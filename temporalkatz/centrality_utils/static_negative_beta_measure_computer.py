@@ -46,7 +46,7 @@ class StaticNegativeBetaMeasureComputer(BaseComputer):
             new_col_df = pd.DataFrame({str(i):nbmes_with_epsilon})
             nbmes_df = nbmes_df.join(new_col_df, how='outer')
         nbmes_df.insert(0,"node_id",nbmes_df.index)
-        return nbmes_df.fillna(0.0).as_matrix()
+        return nbmes_df.fillna(0.0).values
 
 
     def save_snapshot(self,experiment_folder,snapshot_index,graph,snapshot_graph,time=None):

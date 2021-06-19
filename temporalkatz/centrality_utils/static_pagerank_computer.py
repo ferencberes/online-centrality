@@ -43,7 +43,7 @@ class StaticPageRankComputer(BaseComputer):
             new_col_df = pd.DataFrame({str(i):pd.Series(pr_scores)})
             pr_df = pr_df.join(new_col_df, how='outer')
         pr_df.insert(0,"node_id",pr_df.index)
-        return pr_df.fillna(0.0).as_matrix()
+        return pr_df.fillna(0.0).values
         
     def save_snapshot(self,experiment_folder,snapshot_index,graph,snapshot_graph,time=None):
         self.stat_pr = self.calculate_pageranks(graph,snapshot_graph)

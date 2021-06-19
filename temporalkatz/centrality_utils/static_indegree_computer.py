@@ -40,7 +40,7 @@ class StaticIndegreeComputer(BaseComputer):
             new_col_df = pd.DataFrame({str(i):indeg_with_epsilon})
             indeg_df = indeg_df.join(new_col_df, how='outer')
         indeg_df.insert(0,"node_id",indeg_df.index)
-        return indeg_df.fillna(0.0).as_matrix()
+        return indeg_df.fillna(0.0).values
         
     def save_snapshot(self,experiment_folder,snapshot_index,graph,snapshot_graph,time=None):
         self.stat_indeg = self.calculate_indegrees(graph,snapshot_graph)

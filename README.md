@@ -1,6 +1,8 @@
 Temporal Katz centrality
 ========================
 
+![build](https://github.com/ferencberes/online-centrality/actions/workflows/main.yml/badge.svg)
+
 This repository contains the code related to the research of [Ferenc Béres](https://github.com/ferencberes), [Róbert Pálovics](https://github.com/rpalovics) and András A. Benczúr. If you are interested in our work then you can read the full [paper](https://appliednetsci.springeropen.com/articles/10.1007/s41109-018-0080-5) or check out the [poster](https://github.com/ferencberes/online-centrality/raw/master/documents/mlg_2018_poster.pdf) that I presented at the 14th International Workshop on
 Mining and Learning with Graphs (KDD18).
 
@@ -26,20 +28,13 @@ pages="26",
 A former version of our research was presented at the 6th International Conference on Complex Networks and Their Applications. You can find the related codebase on a different [branch](https://github.com/ferencberes/online-centrality/tree/complex_networks_2017).
 
 
-# Requirements
+# Install
 
-   * UNIX environment
-   * **Python 3.5** conda environment with pre-installed jupyter:
+- UNIX environment, Python>=3.6
 
-   ```bash
-   conda create -n YOUR_CONDA_PY3_ENV python=3.5 jupyter
-   source activate YOUR_CONDA_PY3_ENV
-   ```
-   * Install the following packages with *conda* or *pip*:
-      * **data processing:** pandas, numpy
-      * **scientific:** scipy, networkx, editdistance
-      * **visualization:** matplotlib, seaborn
-      * **general:** sys, os, math, re, json, shutil, operator, collections, multiprocessing, functools, itertools, datetime, pytz
+```bash
+python setup.py install
+```
 
 # Data
 
@@ -57,7 +52,6 @@ After you have downloaded the data sets (see previous section) you can run the e
 You can simply run all the following steps with one script but it will take many time. Look for details in the next section (Calculate centrality scores).
 
 ```bash
-source activate YOUR_CONDA_PY3_ENV
 bash ./scripts/run_all.sh
 ```
 
@@ -70,8 +64,7 @@ If you read further, you can see the details and instructions related to each ta
 You can calculate centrality scores for hourly snapshots with the following script.
 
 ```bash
-source activate YOUR_CONDA_PY3_ENV
-bash ./scripts/calculate_centrality_scores.sh
+python ./scripts/CentralityScoreComputer.py rg17 3600
 ```
 
 **It could take several hours** to calculate the scores for all parametrizations that is required for the following steps. That is the reason why we use **--ExecutePreprocessor.timeout=7200** configuration for  the **jupyter nbconvert** command. If the execution don't finish in 2 hours on your computer then you should increase this time limit.

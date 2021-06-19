@@ -5,9 +5,10 @@ bash ./scripts/download_data.sh
 
 echo "### Calculate centrality scores ###"
 echo "This step could take a lot of time!"
-bash ./scripts/calculate_centrality_scores.sh
+python ./experiments/CentralityScoreComputer.py rg17 43200 1
+#3600
 
 echo "### Run experiments ###"
-bash ./scripts/run_experiments.sh
+#bash ./scripts/run_experiments.sh
 
 echo "### DONE ###"

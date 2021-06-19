@@ -39,7 +39,7 @@ class StaticHarmonicCentralityComputer(BaseComputer):
             new_col_df = pd.DataFrame({str(i):hc_with_epsilon})
             hc_df = hc_df.join(new_col_df, how='outer')
         hc_df.insert(0,"node_id",hc_df.index)
-        return hc_df.fillna(0.0).as_matrix()
+        return hc_df.fillna(0.0).values
         
     def save_snapshot(self,experiment_folder,snapshot_index,graph,snapshot_graph,time=None):
         self.stat_hc = self.calculate_harmonic_centralities(graph,snapshot_graph)
