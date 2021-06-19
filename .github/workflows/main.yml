@@ -30,7 +30,7 @@ jobs:
       - name: Test coverage.
         run: |
          bash -e ./scripts/run_all.sh
-         #python setup.py test
-         #codecov
-         #- name: Code Coverage
-         #uses: codecov/codecov-action@v1
+         python setup.py test
+         codecov
+      - name: Code Coverage
+        uses: codecov/codecov-action@v1
