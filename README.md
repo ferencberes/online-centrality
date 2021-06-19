@@ -2,6 +2,7 @@ Temporal Katz centrality
 ========================
 
 ![build](https://github.com/ferencberes/online-centrality/actions/workflows/main.yml/badge.svg)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/django)
 
 This repository contains the code related to the research of [Ferenc Béres](https://github.com/ferencberes), [Róbert Pálovics](https://github.com/rpalovics) and András A. Benczúr. If you are interested in our work then you can read the full [paper](https://appliednetsci.springeropen.com/articles/10.1007/s41109-018-0080-5) or check out the [poster](https://github.com/ferencberes/online-centrality/raw/master/documents/mlg_2018_poster.pdf) that I presented at the 14th International Workshop on
 Mining and Learning with Graphs (KDD18).
