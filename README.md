@@ -43,7 +43,7 @@ A former version of our research was presented at the 6th International Conferen
 
 # Data
 
-The **US Open 2017 (UO17)** and **Roland-Garros 2017 (RG17)** Twitter datasets are available on the [website](https://dms.sztaki.hu/hu/letoltes/temporal-katz-centrality-data-sets) of our research group.
+The **US Open 2017 (UO17)** and **Roland-Garros 2017 (RG17)** Twitter datasets are available on the [website](https://dms.sztaki.hu/~fberes/tennis/) of our research group.
 
 You can also download all related data sets with the following command
 ```bash
